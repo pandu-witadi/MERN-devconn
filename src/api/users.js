@@ -15,7 +15,7 @@ const register = async (req, res) => {
     // input checking
     await check('name', 'Name is required').notEmpty().run(req)
     await check('email', 'Please include a valid email').isEmail().run(req)
-    await check('password', 'length 6 or more characters').isLength({ min: 6 }).run(req)
+    await check('password', 'Password length 6 or more characters').isLength({ min: 6 }).run(req)
 
     const errors = validationResult(req)
     if ( !errors.isEmpty() )
@@ -26,7 +26,7 @@ const register = async (req, res) => {
 
         let user = await User.findOne({ email: email })
         if (user)
-            return res.json({ errors: [{ msg: 'email already registered' }] })
+            return res.status(400).json({ errors: [{ msg: 'email already registered' }] })
 
         let avatar = gravatar.url(email, {
             s: '200',
@@ -44,16 +44,11 @@ const register = async (req, res) => {
         let { hashPassword, __v, ...others } = user._doc
 
         return res.status(200).json({
-            ...others,
             accessToken: accessToken
         })
     } catch(err) {
         return res.status(400).json({ errors: [{ msg: 'register error' }] })
     }
-
-
-
-    return res.json(res.body)
 }
 
 module.exports = {

@@ -6,12 +6,10 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { setAlert } from '../../store/actions/alert'
-
-// for testing server
-import axios from 'axios'
+import { register } from '../../store/actions/auth'
 
 
-const Register = ({ setAlert }) => {
+const Register = ({ setAlert, register }) => {
     const [formData, setFormData] = useState({
         email: '',
         name: '',
@@ -24,21 +22,10 @@ const Register = ({ setAlert }) => {
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value} )
     const onSubmit = async(e) => {
         e.preventDefault()
-        if (password !== confirmPassword) {
+        if (password !== confirmPassword)
             setAlert('password do not match', 'danger')
-        } else {
-            // for testing server connection
-            try {
-                const config = {
-                   headers: { 'Content-Type': 'application/json' }
-               }
-               const body = JSON.stringify({email, password, name})
-               const res = await axios.post('/api/users', body, config)
-               console.log(res.data)
-            } catch(err) {
-                console.log(err.response.data)
-            }
-        }
+        else
+            register({ email, password, name })
     }
 
     return(
@@ -54,6 +41,7 @@ const Register = ({ setAlert }) => {
                         name="email"
                         value={email}
                         onChange={ e => onChange(e) }
+                        required
                         />
                     <small className="form-text"
                     >This site uses Gravatar so if you want a profile image, use a
@@ -67,6 +55,7 @@ const Register = ({ setAlert }) => {
                         name="name"
                         value={name}
                         onChange={ e => onChange(e) }
+                        required
                         />
                 </div>
                 <div className="form-group">
@@ -77,6 +66,7 @@ const Register = ({ setAlert }) => {
 
                     value={password}
                     onChange={ e => onChange(e) }
+                    required
                     />
                 </div>
                 <div className="form-group">
@@ -87,6 +77,7 @@ const Register = ({ setAlert }) => {
 
                     value={confirmPassword}
                     onChange={ e => onChange(e) }
+                    required
                     />
                 </div>
                 <input type="submit" className="btn btn-primary" value="Register" />
@@ -100,7 +91,7 @@ const Register = ({ setAlert }) => {
 
 Register.propTypes = {
     setAlert: PropTypes.func.isRequired,
-    // register: PropTypes.func.isRequired,
+    register: PropTypes.func.isRequired,
     // isAuthenticated: PropTypes.bool
 }
 
@@ -111,5 +102,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { setAlert }
+    { setAlert, register }
 )(Register)

@@ -14,14 +14,14 @@ const authRequired = (req, res, next) => {
         accessToken = req.query.accessToken || req.headers['x-access-token']
 
     if(!accessToken)
-        return res.json({ errors: "No authentication token, access denied" })
-        
+        return res.status(401).json({ errors: [{ msg: "No authentication token, access denied" }] })
+
     try {
         var decoded = jwt.verify(accessToken, CF.jwt.secret_str)
         req.userId = decoded.data.userId
         next()
     } catch (err) {
-        return res.json({ errors: 'Token verification failed, authorization denied' })
+        return res.status(401).json({ errors:  [{ msg: 'Token verification failed, authorization denied'  }] })
     }
 }
 

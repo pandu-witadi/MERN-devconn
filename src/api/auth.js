@@ -16,7 +16,7 @@ const currentUser = async (req, res) => {
         let { hashPassword, __v, ...others } = user._doc
         return res.status(200).json({ ...others })
     } catch(err) {
-        return res.status(400).json({ errors: 'accessToken error' })
+        return res.status(500).json({ errors:  [{ msg: 'accessToken error' }] })
     }
 }
 
@@ -42,7 +42,9 @@ const login = async (req, res) => {
 
         let accessToken = createToken({ userId: user._id })
         let { hashPassword, __v, ...others } = user._doc
-        return res.status(200).json({ accessToken: accessToken })
+        return res.status(200).json({
+            accessToken: accessToken
+        })
     } catch (err) {
         return res.status(400).json({ errors: [{ msg: 'login error' }] })
     }
