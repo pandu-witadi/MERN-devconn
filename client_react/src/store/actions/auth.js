@@ -11,7 +11,7 @@ import {
     LOGOUT
 } from '../types'
 import { setAlert } from './alert'
-import setAuthToken from '../utils/setAuthToken'
+import setAuthToken from '../../utils/setAuthToken'
 
 
 // load user
