@@ -6,7 +6,7 @@ const { authRequired } = require('../middleware/auth')
 
 // -----------------------------------------------------------------------------
 const users = require('./users')
-router.post('/user', users.register)
+router.post('/users', users.register)
 
 // -----------------------------------------------------------------------------
 const auth = require('./auth')
