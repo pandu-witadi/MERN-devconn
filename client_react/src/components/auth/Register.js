@@ -2,13 +2,16 @@
 //
 import React, { Fragment, useState } from 'react'
 import { Link, Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
-// for testing server connection
-// import CF from '../../config'
+import { setAlert } from '../../store/actions/alert'
+
+// for testing server
 import axios from 'axios'
 
 
-const Register = () => {
+const Register = ({ setAlert }) => {
     const [formData, setFormData] = useState({
         email: '',
         name: '',
@@ -22,7 +25,7 @@ const Register = () => {
     const onSubmit = async(e) => {
         e.preventDefault()
         if (password !== confirmPassword) {
-            console.log('password do not match', 'danger')
+            setAlert('password do not match', 'danger')
         } else {
             // for testing server connection
             try {
@@ -95,4 +98,18 @@ const Register = () => {
     )
 }
 
-export default Register
+Register.propTypes = {
+    setAlert: PropTypes.func.isRequired,
+    // register: PropTypes.func.isRequired,
+    // isAuthenticated: PropTypes.bool
+}
+
+
+const mapStateToProps = state => ({
+    // isAuthenticated: state.auth.isAuthenticated
+})
+
+export default connect(
+    mapStateToProps,
+    { setAlert }
+)(Register)

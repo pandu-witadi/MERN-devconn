@@ -1,6 +1,6 @@
 let CF = {
-    // baseURL: 'http://localhost:5152'
-    baseURL: ''
+    baseURL: 'http://localhost:5152'
+    // baseURL: ''
 }
 
 
