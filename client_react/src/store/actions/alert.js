@@ -8,7 +8,7 @@ import {
 } from '../types'
 
 
-export const setAlert = (msg, alertType, timeout=2000) => dispatch => {
+export const setAlert = (msg, alertType, timeout=3000) => dispatch => {
     const id = uuidv4()
     dispatch({
         type: SET_ALERT,
