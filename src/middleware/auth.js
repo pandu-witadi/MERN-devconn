@@ -13,8 +13,6 @@ const authRequired = (req, res, next) => {
     else
         accessToken = req.query.accessToken || req.headers['x-access-token']
 
-    console.log('accessToken', accessToken)
-        
     if(!accessToken)
         return res.status(401).json({ errors: [{ msg: "No authentication token, access denied" }] })
 

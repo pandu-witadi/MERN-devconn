@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 
 import { getCurrentProfile } from '../../store/actions/profile'
 import Spinner from '../layout/Spinner'
-
+import DashboardActions from './DashboardActions'
 
 const Dashboard = ({
     getCurrentProfile,
@@ -16,7 +16,7 @@ const Dashboard = ({
 ) => {
     useEffect( () => {
         getCurrentProfile()
-    }, [])
+    }, [getCurrentProfile])
 
     return loading && profile === null ? (
         <Spinner />
@@ -28,7 +28,7 @@ const Dashboard = ({
             </p>
             { profile !== null ? (
                 <Fragment>
-                    dashboard
+                    <DashboardActions />
                 </Fragment>
             ) : (
                 <Fragment>

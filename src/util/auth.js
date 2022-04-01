@@ -8,7 +8,6 @@ const CF = require('../config/default')
 
 
 const passwordHash = async(rawPassword) => {
-    console.log('raw', rawPassword)
     let salt = await bcrypt.genSalt(CF.jwt.saltLength)
     return await bcrypt.hash(rawPassword, salt)
 }
