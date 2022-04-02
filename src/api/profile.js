@@ -80,8 +80,90 @@ const createOrUpdate = async (req, res) => {
     }
 }
 
+const addExperience = async (req, res) => {
+    await check('title', 'title is required').notEmpty().run(req)
+    await check('company', 'company is required').notEmpty().run(req)
+    await check('from', 'From date is required').notEmpty().run(req)
+
+    const errors = validationResult(req)
+    if ( !errors.isEmpty() )
+        return res.status(400).json({ errors: errors.array() })
+
+    const {
+        title,
+        company,
+        location,
+        from,
+        to,
+        current,
+        description
+    } = req.body
+
+    const newExp = {
+        title,
+        company,
+        location,
+        from,
+        to,
+        current,
+        description
+    }
+
+    try {
+        const profile = await Profile.findOne({ user: req.userId })
+        profile.experience.unshift(newExp)
+
+        await profile.save()
+        return res.json(profile)
+    } catch (err) {
+        return res.status(400).json({ errors: [{ msg: 'server error' }] })
+    }
+}
+
+const addEducation = async (req, res) => {
+    await check('school', 'school ititles required').notEmpty().run(req)
+    await check('fieldofstudy', 'Field of study is required').notEmpty().run(req)
+    await check('from', 'From date is required').notEmpty().run(req)
+
+    const errors = validationResult(req)
+    if ( !errors.isEmpty() )
+        return res.status(400).json({ errors: errors.array() })
+
+    const {
+        school,
+        degree,
+        fieldofstudy,
+        from,
+        to,
+        current,
+        description
+    } = req.body
+
+    const newEdu = {
+        school,
+        degree,
+        fieldofstudy,
+        from,
+        to,
+        current,
+        description
+    }
+
+    try {
+        const profile = await Profile.findOne({ user: req.userId })
+        profile.education.unshift(newEdu)
+
+        await profile.save()
+        return res.json(profile)
+    } catch (err) {
+        return res.status(400).json({ errors: [{ msg: 'server error' }] })
+    }
+}
+
 
 module.exports = {
     currentProfile,
-    createOrUpdate
+    createOrUpdate,
+    addExperience,
+    addEducation
 }

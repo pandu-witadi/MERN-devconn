@@ -6,10 +6,10 @@ import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom'
 import { createProfile } from '../../store/actions/profile'
 
-import setAuthToken from '../../utils/setAuthToken'
-//
-if (localStorage.accessToken)
-    setAuthToken(localStorage.accessToken)
+// import setAuthToken from '../../utils/setAuthToken'
+// //
+// if (localStorage.accessToken)
+//     setAuthToken(localStorage.accessToken)
 
 const CreateProfile = ({ createProfile, history }) => {
     const [formData, setFormData] = useState({
