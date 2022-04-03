@@ -63,7 +63,7 @@ const AddExperience = ({ addExperience, history }) => {
                 </div>
                 <div className="form-group">
                     <p>
-                        <input type="checkbox" name="current" value="" value={current} checked={current}
+                        <input type="checkbox" name="current" value={current} checked={current}
                             onChange={ e => {
                                 setFormData({ ...formData, current: ! current })
                                 toggleDisabled( !toDateDisabled )

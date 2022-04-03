@@ -46,8 +46,10 @@ const EditProfile = ({
             linkedin: loading || !profile.social ? '' : profile.social.linkedin,
             youtube: loading || !profile.social ? '' : profile.social.youtube,
             instagram: loading || !profile.social ? '' : profile.social.instagram
-        })
-    }, [ loading, getCurrentProfile ])
+        }) // eslint-disable-line
+    }, [ loading, getCurrentProfile,
+        profile.bio, profile.company, profile.githubusername, profile.location, profile.skills, profile.social, profile.status, profile.website 
+    ])
 
     const {
         company,

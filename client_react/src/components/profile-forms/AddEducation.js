@@ -63,12 +63,12 @@ const AddEducation = ({ addEducation, history }) => {
                 </div>
                 <div className="form-group">
                     <p>
-                        <input type="checkbox" name="current" value="" value={current} checked={current}
+                        <input type="checkbox" name="current" value={current} checked={current}
                             onChange={ e => {
                                 setFormData({ ...formData, current: ! current })
                                 toggleDisabled( !toDateDisabled )
                             }}
-                        />{' '}Current Job
+                        />{' '}Current School
                     </p>
                 </div>
                 <div className="form-group">

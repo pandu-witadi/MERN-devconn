@@ -2,6 +2,7 @@
 //
 const { check, validationResult } = require('express-validator')
 const Profile = require('../models/Profile')
+const User = require('../models/User')
 
 
 const currentProfile = async (req, res) => {
@@ -160,10 +161,69 @@ const addEducation = async (req, res) => {
     }
 }
 
+const deleteExperience = async (req, res) => {
+    try {
+        const profile = await Profile.findOne({ user: req.userId })
+
+        // Filter exprience array using _id (NOTE: _id is a BSON type needs to be converted to string)
+        // This can also be omitted and the next line and findOneAndUpdate to be used instead (above implementation)
+        profile.experience = profile.experience.filter(exp => exp._id.toString() !== req.params.exp_id)
+
+        await profile.save()
+        return res.status(200).json(profile)
+    } catch (err) {
+        return res.status(400).json({ errors: [{ msg: 'server error' }] })
+    }
+}
+
+const deleteEducation = async (req, res) => {
+    try {
+        const profile = await Profile.findOne({ user: req.userId })
+
+        const eduIds = profile.education.map(edu => edu._id.toString());
+        // if i dont add .toString() it returns this weird mongoose coreArray and the ids are somehow objects and it still deletes anyway even if you put /education/5
+        const removeIndex = eduIds.indexOf(req.params.edu_id);
+        if (removeIndex === -1) {
+            return res.status(500).json({ errors: [{ msg: 'server error' }] })
+        } else {
+            // theses console logs helped me figure it out
+            // console.log("eduIds", eduIds);
+            // console.log("typeof eduIds", typeof eduIds);
+            // console.log("req.params", req.params);
+            // console.log("removed", eduIds.indexOf(req.params.edu_id));
+
+            profile.education.splice( removeIndex, 1)
+            await profile.save()
+            return res.status(200).json(profile)
+        }
+    } catch (err) {
+        return res.status(400).json({ errors: [{ msg: 'server error' }] })
+    }
+}
+
+const deleteAccount = async (req, res) => {
+    try {
+        // 1 - Remove posts
+
+        // 2 - Remove profile
+        await Profile.findOneAndRemove({ user: req.userId });
+
+        // 3- Remove user
+        await User.findOneAndRemove({ _id: req.userId });
+
+        return res.json({ msg: 'User deleted' })
+    } catch (err) {
+        return res.status(400).json({ errors: [{ msg: 'server error' }] })
+    }
+}
+
 
 module.exports = {
     currentProfile,
     createOrUpdate,
     addExperience,
-    addEducation
+    addEducation,
+    deleteExperience,
+    deleteEducation,
+    deleteAccount
 }
