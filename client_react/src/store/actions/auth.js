@@ -43,7 +43,7 @@ export const register = ({ email, password, name }) => async dispatch => {
             type: REGISTER_SUCCESS,
             payload: res.data
         })
-        // dispatch( loadUser() )
+        dispatch( loadUser() )
     } catch(err) {
         const errors = err.response.data.errors
         if (errors)
@@ -66,7 +66,7 @@ export const login = ({ email, password }) => async dispatch => {
             type: LOGIN_SUCCESS,
             payload: res.data
         })
-        // dispatch( loadUser() )
+        dispatch( loadUser() )
 
     } catch(err) {
         const errors = err.response.data.errors
