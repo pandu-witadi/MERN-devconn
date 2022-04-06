@@ -1,5 +1,6 @@
 //
 //
+const request = require('request')
 const { check, validationResult } = require('express-validator')
 const Profile = require('../models/Profile')
 const User = require('../models/User')
@@ -18,6 +19,31 @@ const currentProfile = async (req, res) => {
         return res.status(500).json({ errors: err })
     }
 }
+
+
+const allProfiles = async (req, res) => {
+    try {
+        let profiles = await Profile.find()
+            .populate( 'user', ['name', 'avatar'] )
+
+        return res.json(profiles)
+    } catch(err) {
+        return res.status(500).json({ errors: err })
+    }
+}
+
+
+const profileById = async (req, res) => {
+    try {
+        let profile = await Profile.findOne({ user: req.params.user_id })
+            .populate( 'user', ['name', 'avatar'] )
+
+        return res.json(profile)
+    } catch(err) {
+        return res.status(500).json({ msg: 'Profile not found' })
+    }
+}
+
 
 const createOrUpdate = async (req, res) => {
     await check('status', 'Status is required').notEmpty().run(req)
@@ -217,6 +243,32 @@ const deleteAccount = async (req, res) => {
     }
 }
 
+const getGithubRepos = async (req, res) => {
+    try {
+        const options = {
+            uri: encodeURI(`https://api.github.com/users/${
+                req.params.username
+            }/repos?per_page=5&sort=created:asc&client_id=${config.get(
+                'githubClientId'
+            )}&client_secret=${config.get('githubSecret')}`),
+            method: 'GET',
+            headers: { 'user-agent': 'node.js' }
+        }
+
+        request(options, (error, response, body) => {
+            if (error) console.error(error);
+
+            if (response.statusCode !== 200)
+                return res.status(404).json({ msg: 'No Github profile found' });
+
+
+            return res.json(JSON.parse(body));
+        })
+    } catch (err) {
+        return res.status(400).json({ errors: [{ msg: 'server error' }] })
+    }
+}
+
 
 module.exports = {
     currentProfile,
@@ -225,5 +277,8 @@ module.exports = {
     addEducation,
     deleteExperience,
     deleteEducation,
-    deleteAccount
+    deleteAccount,
+    allProfiles,
+    profileById,
+    getGithubRepos
 }
